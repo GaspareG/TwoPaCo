@@ -1,0 +1,14 @@
+/home/gaspare/git/TwoPaCo/src/CMakeFiles/rebuild_cache.dir
+/home/gaspare/git/TwoPaCo/src/CMakeFiles/edit_cache.dir
+/home/gaspare/git/TwoPaCo/src/CMakeFiles/package.dir
+/home/gaspare/git/TwoPaCo/src/CMakeFiles/package_source.dir
+/home/gaspare/git/TwoPaCo/src/graphdump/CMakeFiles/rebuild_cache.dir
+/home/gaspare/git/TwoPaCo/src/graphdump/CMakeFiles/edit_cache.dir
+/home/gaspare/git/TwoPaCo/src/graphdump/CMakeFiles/graphdump.dir
+/home/gaspare/git/TwoPaCo/src/graphdump/CMakeFiles/package_source.dir
+/home/gaspare/git/TwoPaCo/src/graphdump/CMakeFiles/package.dir
+/home/gaspare/git/TwoPaCo/src/graphconstructor/CMakeFiles/rebuild_cache.dir
+/home/gaspare/git/TwoPaCo/src/graphconstructor/CMakeFiles/edit_cache.dir
+/home/gaspare/git/TwoPaCo/src/graphconstructor/CMakeFiles/package_source.dir
+/home/gaspare/git/TwoPaCo/src/graphconstructor/CMakeFiles/twopaco.dir
+/home/gaspare/git/TwoPaCo/src/graphconstructor/CMakeFiles/package.dir
