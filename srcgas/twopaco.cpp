@@ -1,12 +1,10 @@
 /*
  * Author: Gaspare Ferraro <ferraro@gaspa.re>
- *  
+ * Naive implementation of TwoPaCo by Minkin, Pham and Medvedev  
  * https://github.com/GaspareG/TwoPaCo
  */
 
 #include <bits/stdc++.h>
-
-// TODO: add std::string_view support
 
 // k-mers Rolling hash
 namespace RH 
@@ -139,9 +137,12 @@ void TwoPass(const std::vector<std::string>& S, int k, int b, std::set<std::pair
   std::cerr << "Initial candidates: " << C.size() << std::endl;
   
   // First pass with the BloomFilter
-  BF::create(b);
-  filterJunction(S, k,BF::insert,BF::contains,C);  
-  std::cerr << "FirstPass candidates: " << C.size() << std::endl;
+  if( b > 0 )
+  {
+    BF::create(b);
+    filterJunction(S, k,BF::insert,BF::contains,C);  
+    std::cerr << "FirstPass candidates: " << C.size() << std::endl;
+  }
 
   // Second pass with the HashTable
   HT::create();
@@ -176,10 +177,25 @@ std::set<std::string> TwoPaCo(const std::vector<std::string>& S, int k, int b, i
     
     // Create set of junction candidates
     // TODO
+    for(size_t s=0; s<S.size(); s++)
+    {
+        for(size_t p=1; p<S[s].size()-k; p++)
+        {
+            candidates.insert( std::make_pair(s, p) );
+        }
+    }
 
     // Find real junctions
     TwoPass(S, k, b, candidates);
 
+    // Add all the initial genomes
+    for(auto s : S)
+        junctions.insert( s.substr(0, k) );
+
+    // Add all the final genomes
+    for(auto s : S)
+        junctions.insert( s.substr(s.size()-k, k) );
+    
     // Merge them in the final set of junctions
     for(auto junction : candidates)
       junctions.insert( S[junction.first].substr(junction.second, k) );
@@ -188,8 +204,56 @@ std::set<std::string> TwoPaCo(const std::vector<std::string>& S, int k, int b, i
   return junctions;
 }
 
+std::string readSequence(const std::string& fileName)
+{
+    std::string line;
+    std::string sequence;
+    std::ifstream f(fileName);
+    while( f )
+    {
+        std::getline(f, line);
+        if( line.front() == '>' )
+            continue;
+        if( line.back() == '\n' )
+            line.pop_back();
+        sequence += line;
+    }
+    std::cerr << "Load from " << fileName << " sequence of length " << sequence.size() << std::endl;
+    return sequence;
+}
+
 int main(int argc, char **argv)
 {
+    // Usage ./twopaco k b l file1 file2 file3 file4
+    if( argc < 6 )
+    {
+        std::cout << "Usage ./" << argv[0] << " k b l file1 file2 file3 ..." << std::endl;
+        return -1;
+    }
+
+    // Parsing input parameters
+    int k = atoi(argv[1]);
+    int b = atoi(argv[2]);
+    int l = atoi(argv[3]);
+
+    assert( 2 <= k );
+    assert( b == 0  || (10 <= b && b <= 30) );
+    assert( 1 <= l );
+
+    b = (1<<b);
+
+    // Read input sequences
+    std::vector<std::string> S;
+    for(int i=4; i <argc; i++)
+        S.push_back(readSequence(std::string(argv[i])));
+    
+    // Find junctions
+    std::set<std::string> junctions = TwoPaCo(S, k, b, l);
+
+    // Print the junctions
+    std::cerr << "Found " << junctions.size() << " junctions:" << std::endl;
+    //for(std::string j : junctions)
+    //    std::cout << "\t[" << j << "]" << std::endl;
 
     return 0;
 }

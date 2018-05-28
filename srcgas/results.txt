@@ -1,0 +1,72 @@
+2 Ecoli ~39s
+4 Ecoli ~80s
+8 Ecoli ~170s
+
+2 Ecoli
+Load from ../data/ecoli/01.FM180568.sequence.fasta sequence of length 4965553
+Load from ../data/ecoli/02.FN554766.sequence.fasta sequence of length 5241977
+TwoPaCo create partitions
+TwoPaCo filter chunk #0
+Initial candidates: 10207478
+FilterJunction insert k-mers in set
+FilterJunction querying the set
+FilterJunction remove false candidates
+FirstPass candidates: 10207478
+FilterJunction insert k-mers in set
+FilterJunction querying the set
+FilterJunction remove false candidates
+SecondPass candidates: 177396
+Found 85078 junctions:
+
+real	0m39.007s
+user	0m38.646s
+sys	0m0.360s
+
+4 Ecoli
+Load from ../data/ecoli/01.FM180568.sequence.fasta sequence of length 4965553
+Load from ../data/ecoli/02.FN554766.sequence.fasta sequence of length 5241977
+Load from ../data/ecoli/03.CP000247.sequence.fasta sequence of length 4938920
+Load from ../data/ecoli/04.CU928145.sequence.fasta sequence of length 5154862
+TwoPaCo create partitions
+TwoPaCo filter chunk #0
+Initial candidates: 20301208
+FilterJunction insert k-mers in set
+FilterJunction querying the set
+FilterJunction remove false candidates
+FirstPass candidates: 20301208
+FilterJunction insert k-mers in set
+FilterJunction querying the set
+FilterJunction remove false candidates
+SecondPass candidates: 676686
+Found 209195 junctions:
+
+real	1m20.271s
+user	1m19.709s
+sys	0m0.500s
+
+8 Ecoli
+Load from ../data/ecoli/01.FM180568.sequence.fasta sequence of length 4965553
+Load from ../data/ecoli/02.FN554766.sequence.fasta sequence of length 5241977
+Load from ../data/ecoli/03.CP000247.sequence.fasta sequence of length 4938920
+Load from ../data/ecoli/04.CU928145.sequence.fasta sequence of length 5154862
+Load from ../data/ecoli/05.CP001671.sequence.fasta sequence of length 5131397
+Load from ../data/ecoli/06.CP000468.sequence.fasta sequence of length 5082025
+Load from ../data/ecoli/07.CP004009.sequence.fasta sequence of length 4798435
+Load from ../data/ecoli/08.CP004009.sequence.fasta sequence of length 4558953
+TwoPaCo create partitions
+TwoPaCo filter chunk #0
+Initial candidates: 39871914
+FilterJunction insert k-mers in set
+FilterJunction querying the set
+FilterJunction remove false candidates
+FirstPass candidates: 39871914
+FilterJunction insert k-mers in set
+FilterJunction querying the set
+FilterJunction remove false candidates
+SecondPass candidates: 1822724
+Found 326107 junctions:
+
+real	2m49.450s
+user	2m48.409s
+sys	0m0.930s
+
