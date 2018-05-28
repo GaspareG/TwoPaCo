@@ -9,26 +9,25 @@
 // k-mers Rolling hash
 namespace RH 
 {
-  int h = 8; // #default number of hash functions
+  int h = 1; // #default number of hash functions
   
   // Compute the Rolling-Hash value in O(|x|)
-  int getRHValue(int idx, const std::string& x)
+  uint64_t getRHValue(int idx, const std::string& x)
   {
-    // TODO
-    return 0;
+    return std::hash<std::string>{}(x);
   }
 
   // Compute the next Rolling-Hash value in O(1)
-  int getNextRHValue(int idx, int oldRH, char newChar, int k)
+  uint64_t getNextRHValue(int idx, uint64_t oldRH, char newChar, int k)
   {
     // TODO 
     return 0;
   }
 
   // Evalute all the basic Rolling-hash value in O(|x|h)
-  std::vector<int> getAllHash(const std::string& x)
+  std::vector<uint64_t> getAllHash(const std::string& x)
   {
-    std::vector<int> output;
+    std::vector<uint64_t> output;
     for(int i=0; i<h; i++)
       output.push_back(getRHValue(i, x));
     return output;
@@ -38,27 +37,28 @@ namespace RH
 // BloomFilter data struct
 namespace BF 
 {
-  int b = (1<<30); // default BloomFilter size: 1GB
+  uint64_t b = (1<<30); // default BloomFilter size: 1GB
   std::vector<bool> bloomFilter;
   
   void insert(const std::string& x)
   {
-    std::vector<int> hv = RH::getAllHash(x);
+    std::vector<uint64_t> hv = RH::getAllHash(x);
     for(auto i : hv)
-      bloomFilter[i] = true;
+      bloomFilter[i % b] = true;
   }
   
   bool contains(const std::string& x)
   {
     bool check = true;
-    std::vector<int> hv = RH::getAllHash(x);
+    std::vector<uint64_t> hv = RH::getAllHash(x);
     for(auto i : hv)
-      check &= bloomFilter[i];
+      check &= bloomFilter[i % b];
     return check;
   }
   
-  void create(int b)
+  void create(int nb)
   {
+    b = 1ull<<static_cast<uint64_t>(nb);
     bloomFilter.clear();
     bloomFilter.resize(b);
   }
@@ -140,17 +140,20 @@ void TwoPass(const std::vector<std::string>& S, int k, int b, std::set<std::pair
   if( b > 0 )
   {
     BF::create(b);
+    std::cerr << "FirstPass call" << std::endl;
     filterJunction(S, k,BF::insert,BF::contains,C);  
     std::cerr << "FirstPass candidates: " << C.size() << std::endl;
   }
 
   // Second pass with the HashTable
   HT::create();
+  std::cerr << "SecondPass call" << std::endl;
   filterJunction(S, k,HT::insert,HT::contains,C);  
   std::cerr << "SecondPass candidates: " << C.size() << std::endl;
 }
 
 // Round Splitting input k-mers
+/*
 std::vector<std::pair<int,int>> roundSplitting(const std::vector<std::string>& S, int k, int l)
 {
   std::vector<std::pair<int,int>> chunks;
@@ -159,6 +162,7 @@ std::vector<std::pair<int,int>> roundSplitting(const std::vector<std::string>& S
 
   return chunks;
 }
+*/
 
 // TwoPaCo
 std::set<std::string> TwoPaCo(const std::vector<std::string>& S, int k, int b, int l)
@@ -167,23 +171,18 @@ std::set<std::string> TwoPaCo(const std::vector<std::string>& S, int k, int b, i
 
   // Create partition using roundSplitting
   std::cerr << "TwoPaCo create partitions" << std::endl;
-  std::vector<std::pair<int,int>> chunks = roundSplitting(S, k, l);
+  //std::vector<std::pair<int,int>> chunks = roundSplitting(S, k, l);
 
   // Iteratore over chunks and analyze them separately
-  for(int i=0; i<l; i++)
+  for(int i=0; i<1; i++)
   {
     std::cerr << "TwoPaCo filter chunk #" << i << std::endl;
     std::set<std::pair<int,int>> candidates;
     
     // Create set of junction candidates
-    // TODO
     for(size_t s=0; s<S.size(); s++)
-    {
         for(size_t p=1; p<S[s].size()-k; p++)
-        {
             candidates.insert( std::make_pair(s, p) );
-        }
-    }
 
     // Find real junctions
     TwoPass(S, k, b, candidates);
@@ -237,10 +236,8 @@ int main(int argc, char **argv)
     int l = atoi(argv[3]);
 
     assert( 2 <= k );
-    assert( b == 0  || (10 <= b && b <= 30) );
+    assert( b == 0  || (10 <= b && b <= 31) );
     assert( 1 <= l );
-
-    b = (1<<b);
 
     // Read input sequences
     std::vector<std::string> S;
