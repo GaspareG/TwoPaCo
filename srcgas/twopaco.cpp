@@ -1,22 +1,33 @@
+/*
+ * Author: Gaspare Ferraro <ferraro@gaspa.re>
+ *  
+ * https://github.com/GaspareG/TwoPaCo
+ */
+
 #include <bits/stdc++.h>
+
+// TODO: add std::string_view support
 
 // k-mers Rolling hash
 namespace RH 
 {
-  int h = 4; // # of hash functions
-    
+  int h = 8; // #default number of hash functions
+  
+  // Compute the Rolling-Hash value in O(|x|)
   int getRHValue(int idx, const std::string& x)
   {
     // TODO
     return 0;
   }
 
+  // Compute the next Rolling-Hash value in O(1)
   int getNextRHValue(int idx, int oldRH, char newChar, int k)
   {
     // TODO 
     return 0;
   }
 
+  // Evalute all the basic Rolling-hash value in O(|x|h)
   std::vector<int> getAllHash(const std::string& x)
   {
     std::vector<int> output;
@@ -29,14 +40,16 @@ namespace RH
 // BloomFilter data struct
 namespace BF 
 {
-  int b;
+  int b = (1<<30); // default BloomFilter size: 1GB
   std::vector<bool> bloomFilter;
+  
   void insert(const std::string& x)
   {
     std::vector<int> hv = RH::getAllHash(x);
     for(auto i : hv)
       bloomFilter[i] = true;
   }
+  
   bool contains(const std::string& x)
   {
     bool check = true;
@@ -45,6 +58,7 @@ namespace BF
       check &= bloomFilter[i];
     return check;
   }
+  
   void create(int b)
   {
     bloomFilter.clear();
@@ -56,12 +70,15 @@ namespace BF
 namespace HT 
 {
   std::unordered_set<std::string> hashTable;
+  
   void insert(const std::string& x){
     hashTable.insert(x);
   }
+  
   bool contains(const std::string& x){
     return hashTable.find(x) != hashTable.end();
   }  
+  
   void create(){
     hashTable.clear();  
   }
